@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.api.v1.routers import router
 
 
 app = FastAPI(
@@ -7,7 +8,4 @@ app = FastAPI(
     version="0.0.1"
 )
 
-@app.get("/status")
-def get_status():
-    """Get status of messaging server."""
-    return ({"status":  "it's alive"})
+app.include_router(router, prefix="/v1")
