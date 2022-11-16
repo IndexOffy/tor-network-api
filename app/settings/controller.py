@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi.responses import Response
 
-from app.models import Link, Category
+from app.models import Link, Category, Connection
 from app.settings.database import engine
 
 
@@ -111,7 +111,7 @@ class BaseController(object):
             if self.close_session:
                 self.db.close()
 
-    def get_by(self, params: dict):
+    def get_by(self, params: dict, skip: int = 0, limit: int = 100):
         try:
             query_model = self.db.query(self.model_class)
             for item in params:
@@ -119,7 +119,7 @@ class BaseController(object):
                     getattr(self.model_class, item) == params[item]
                 )
             
-            query_model = query_model.all()
+            query_model = query_model.offset(skip).limit(limit).all()
             if query_model:
                 return query_model
 
@@ -145,3 +145,10 @@ class ControllerCategory(BaseController):
     def __init__(self, db: Session):
         super().__init__(db)
         self.model_class = Category
+
+
+class ControllerConnection(BaseController):
+
+    def __init__(self, db: Session):
+        super().__init__(db)
+        self.model_class = Connection
