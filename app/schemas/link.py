@@ -9,10 +9,11 @@ class LinkBase(BaseModel):
     author: Optional[str] = None
     keywords: Optional[str] = None
     verify: Optional[bool] = None
-    fail: Optional[bool] = None
-    attempts: Optional[int] = None
     explored: Optional[bool] = None
-    created_date: datetime = None
+    running: Optional[bool] = None
+    fail: Optional[bool] = None
+    login: Optional[bool] = None
+    attempts: Optional[int] = None
 
 class LinkCreate(LinkBase):
     pass
@@ -24,10 +25,12 @@ class LinkPut(LinkBase):
     author: Optional[str] = None
     keywords: Optional[str] = None
     verify: Optional[bool] = None
-    fail: Optional[bool] = None
-    attempts: Optional[int] = None
     explored: Optional[bool] = None
-    attempts: Optional[bool] = None
+    running: Optional[bool] = None
+    fail: Optional[bool] = None
+    login: Optional[bool] = None
+    attempts: Optional[int] = None
+
 
 class SchemaLink(LinkBase):
     id: int
