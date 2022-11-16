@@ -15,6 +15,7 @@ class LinkBase(BaseModel):
     login: Optional[bool] = None
     attempts: Optional[int] = None
 
+
 class LinkCreate(LinkBase):
     pass
 
