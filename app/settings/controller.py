@@ -88,9 +88,10 @@ class BaseController(object):
 
             if params:
                 for item in params:
-                    query_model = query_model.filter(
-                        getattr(self.model_class, item) == params[item]
-                    )
+                    if params.get(item) is not None:
+                        query_model = query_model.filter(
+                            getattr(self.model_class, item) == params.get(item)
+                        )
 
             query_model = query_model.one_or_none()
 
@@ -116,11 +117,13 @@ class BaseController(object):
     def get_by(self, params: dict, skip: int = 0, limit: int = 100):
         try:
             query_model = self.db.query(self.model_class)
+
             for item in params:
-                query_model = query_model.filter(
-                    getattr(self.model_class, item) == params[item]
-                )
-            
+                if params.get(item) is not None:
+                    query_model = query_model.filter(
+                        getattr(self.model_class, item) == params.get(item)
+                    )
+
             query_model = query_model.offset(skip).limit(limit).all()
             if query_model:
                 return query_model
