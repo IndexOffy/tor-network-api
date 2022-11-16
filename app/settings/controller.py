@@ -94,15 +94,15 @@ class BaseController(object):
 
             query_model = query_model.one_or_none()
 
-            for item in data:
-                if data[item]:
-                    setattr(query_model, item, data[item])
+            if query_model:
+                for item in data:
+                    if data.get(item) is not None:
+                        setattr(query_model, item, data[item])
 
-            self.db.merge(query_model)
-            self.db.commit()
-            self.db.refresh(query_model)
-
-            return query_model
+                self.db.merge(query_model)
+                self.db.commit()
+                self.db.refresh(query_model)
+                return query_model
 
         except:
             return Response(status_code=422)
@@ -110,6 +110,8 @@ class BaseController(object):
         finally:
             if self.close_session:
                 self.db.close()
+
+        return Response(status_code=204)
 
     def get_by(self, params: dict, skip: int = 0, limit: int = 100):
         try:
