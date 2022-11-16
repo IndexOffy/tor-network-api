@@ -14,9 +14,13 @@ router = APIRouter()
 def get_all(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     query = ControllerLink(db=db)
     params = request.query_params._dict
-    if params:
-        return query.get_by(params=params)
-    return query.all(skip=skip, limit=limit)
+
+    lpop = ["limit", "skip"]
+    for param in lpop:
+        if params.get(param):
+            params.pop(param)
+
+    return query.get_by(params=params, skip=skip, limit=limit)
 
 
 @router.get("/links/{model_id}", response_model=SchemaLink)

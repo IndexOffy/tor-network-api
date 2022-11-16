@@ -9,7 +9,7 @@ class Link(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     link = Column(String(95), unique=True, index=True)
-    title = Column(String(45))
+    title = Column(String(100))
     author = Column(String(45))
     keywords = Column(String(50))
     verify = Column(Boolean, default=False, index=True)
