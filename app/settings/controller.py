@@ -119,10 +119,11 @@ class BaseController(object):
             query_model = self.db.query(self.model_class)
 
             for item in params:
-                if params.get(item) is not None:
-                    query_model = query_model.filter(
-                        getattr(self.model_class, item) == params.get(item)
-                    )
+                item_param = None if params.get(item) == 'null' else params.get(item)
+
+                query_model = query_model.filter(
+                    getattr(self.model_class, item) == item_param
+                )
 
             query_model = query_model.offset(skip).limit(limit).all()
             if query_model:
