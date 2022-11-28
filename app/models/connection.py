@@ -1,10 +1,12 @@
-from sqlalchemy import Column, Integer, Boolean
+from sqlalchemy import Column, Integer, Boolean, UniqueConstraint
 from app.settings.database import Base, engine
 
 
 class Connection(Base):
     __tablename__ = "connection"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = (
+        UniqueConstraint('id_link', 'id_href', name='unique_component_commit'),
+    )
 
     id = Column(Integer, primary_key=True, index=True)
     id_link = Column(Integer, index=True)
