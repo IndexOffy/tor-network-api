@@ -9,5 +9,5 @@
 - 📦 PyPI
 
 **RESOURCES**
-- GitHub: https://github.com/IndexOffy/onion-api
+- GitHub: https://github.com/IndexOffy/tor-network-api
 - Docs:   http://www.indexoffy.com/
