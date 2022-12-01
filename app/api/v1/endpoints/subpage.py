@@ -1,51 +1,50 @@
 from typing import List
-from fastapi import Depends, APIRouter, HTTPException, Request
+from fastapi import Depends, APIRouter, Request, status
 
 from sqlalchemy.orm import Session
 from app.settings.database import get_db
 
-from app.schemas.subpage import SchemaSubPage, SubPageCreate, SubPagePut
-from app.settings.controller import ControllerSubPage
+from app.schemas.subpage import Schema, SchemaCreate, SchemaPut
+from app.settings.controller import ControllerSubPage as Controller
+
 
 router = APIRouter()
 
 
-@router.get("/subpages/", response_model=List[SchemaSubPage])
-def get_all(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    query = ControllerSubPage(db=db)
-    params = request.query_params._dict
-
-    lpop = ["limit", "skip"]
-    for param in lpop:
-        if params.get(param):
-            params.pop(param)
-
-    return query.get_by(params=params, skip=skip, limit=limit)
-
-
-@router.get("/subpages/{model_id}", response_model=SchemaSubPage)
-def get(model_id: int, db: Session = Depends(get_db)):
-    query = ControllerSubPage(db=db)
-    db_data = query.get(model_id=model_id)
-    if db_data is None:
-        raise HTTPException(status_code=404, detail="SubPage not found")
-    return db_data
+@router.get("/subpages/", response_model=List[Schema])
+def get_all(
+        request: Request,
+        offset: int = 0,
+        limit: int = 100,
+        sort_by: str = 'id',
+        order_by: str = 'desc',
+        db: Session = Depends(get_db)):
+    return Controller(db=db)._get_all(
+        request=request,
+        offset=offset,
+        limit=limit,
+        sort_by=sort_by,
+        order_by=order_by,
+    )
 
 
-@router.put("/subpages/{model_id}", response_model=SchemaSubPage)
-def put_by_id(model_id: int, item: SubPagePut, db: Session = Depends(get_db)):
-    query = ControllerSubPage(db=db)
-    return query.put(data=item.dict(), model_id=model_id)
+@router.get("/subpages/{model_id}", response_model=Schema)
+def get_one(model_id: int, db: Session = Depends(get_db)):
+    return Controller(db=db).get(model_id=model_id)
 
 
-@router.put("/subpages/", response_model=SchemaSubPage)
-def put_by_param(request: Request, item: SubPagePut, db: Session = Depends(get_db)):
-    query = ControllerSubPage(db=db)
+@router.put("/subpages/{model_id}", response_model=Schema)
+def update(model_id: int, item: SchemaPut, db: Session = Depends(get_db)):
+    return Controller(db=db).put(data=item.dict(), model_id=model_id)
+
+
+@router.post("/subpages/", response_model=Schema, status_code=status.HTTP_201_CREATED)
+def create(item: SchemaCreate, db: Session = Depends(get_db)):
+    return Controller(db=db).post(data=item.dict())
+
+
+@router.put("/subpages/", response_model=Schema, include_in_schema=False)
+def put_by_param(request: Request, item: SchemaPut, db: Session = Depends(get_db)):
+    query = Controller(db=db)
     params = request.query_params._dict
     return query.put(data=item.dict(), params=params)
-
-
-@router.post("/subpages/", response_model=SchemaSubPage)
-def post(item: SubPageCreate, db: Session = Depends(get_db)):
-    query = ControllerSubPage(db=db)
-    return query.post(data=item.dict())
