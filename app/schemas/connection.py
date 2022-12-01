@@ -2,23 +2,23 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class ConnectionBase(BaseModel):
+class SchemaBase(BaseModel):
     id_link: Optional[int] = None
     id_href: Optional[int] = None
     status: Optional[bool] = None
 
 
-class ConnectionPut(ConnectionBase):
+class SchemaPut(SchemaBase):
     id_link: Optional[int] = None
     id_href: Optional[int] = None
     status: Optional[bool] = None
 
 
-class ConnectionCreate(ConnectionBase):
+class SchemaCreate(SchemaBase):
     pass
 
 
-class SchemaConnection(ConnectionBase):
+class Schema(SchemaBase):
     id: int
 
     class Config:

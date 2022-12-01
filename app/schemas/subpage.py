@@ -2,25 +2,25 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class SubPageBase(BaseModel):
+class SchemaBase(BaseModel):
     link: str
     verify: Optional[bool] = None
     running: Optional[bool] = None
     fail: Optional[bool] = None
 
 
-class SubPageCreate(SubPageBase):
+class SchemaCreate(SchemaBase):
     pass
 
 
-class SubPagePut(SubPageBase):
+class SchemaPut(SchemaBase):
     link: Optional[str] = None
     verify: Optional[bool] = None
     running: Optional[bool] = None
     fail: Optional[bool] = None
 
 
-class SchemaSubPage(SubPageBase):
+class Schema(SchemaBase):
     id: int
 
     class Config:
