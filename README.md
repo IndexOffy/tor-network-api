@@ -1,4 +1,4 @@
-# onion-api
+# tor-network-api
 
 ### Commit Style
 - ⚙️ NO-TASK
