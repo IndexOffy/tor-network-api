@@ -1,3 +1,4 @@
+from typing import Any
 from sqlalchemy.orm import Session
 from fastapi.responses import Response
 
@@ -21,16 +22,39 @@ class BaseController(object):
 
         self.model_class = None
 
-    def all(self, skip: int = 0, limit: int = 100):
+    def _get_all(self, *args: Any, **kwargs: Any):
         """Query to get all records from the database.
         """
-        try:
-            query = self.db.query(
-                self.model_class
-            ).offset(skip).limit(limit).all()
 
-            if query:
-                return query
+        columns = dict()
+        params = kwargs.get("request").query_params._dict
+        for param in self.model_class.__mapper__.attrs.keys():
+            if params.get(param) is not None:
+                columns[param] = params.get(param)
+
+        try:
+            query_model = self.db.query(self.model_class)
+
+            for column in columns:
+                item_param = None if columns.get(column) == 'null' else columns.get(column)
+
+                query_model = query_model.filter(
+                    getattr(self.model_class, column) == item_param
+                )
+
+            order_by = getattr(self.model_class, kwargs.get("sort_by"))
+
+            query_model = query_model.order_by(
+                getattr(order_by, kwargs.get("order_by"))()
+            ).offset(
+                kwargs.get("offset")
+            ).limit(
+                kwargs.get("limit")
+            ).all()
+
+            if query_model:
+                return query_model
+
         except Exception:
             return Response(status_code=422)
 
@@ -114,7 +138,7 @@ class BaseController(object):
 
         return Response(status_code=204)
 
-    def get_by(self, params: dict, skip: int = 0, limit: int = 100):
+    def get_by(self, params: dict, offset: int = 0, limit: int = 100):
         try:
             query_model = self.db.query(self.model_class)
 
@@ -125,7 +149,7 @@ class BaseController(object):
                     getattr(self.model_class, item) == item_param
                 )
 
-            query_model = query_model.offset(skip).limit(limit).all()
+            query_model = query_model.offset(offset).limit(limit).all()
             if query_model:
                 return query_model
 
