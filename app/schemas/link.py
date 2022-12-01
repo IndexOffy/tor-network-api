@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class LinkBase(BaseModel):
+class SchemaBase(BaseModel):
     link: str
     title: Optional[str] = None
     author: Optional[str] = None
@@ -15,11 +15,11 @@ class LinkBase(BaseModel):
     attempts: Optional[int] = None
 
 
-class LinkCreate(LinkBase):
+class SchemaCreate(SchemaBase):
     pass
 
 
-class LinkPut(LinkBase):
+class SchemaPut(SchemaBase):
     link: Optional[str] = None
     title: Optional[str] = None
     author: Optional[str] = None
@@ -32,7 +32,7 @@ class LinkPut(LinkBase):
     attempts: Optional[int] = None
 
 
-class SchemaLink(LinkBase):
+class Schema(SchemaBase):
     id: int
 
     class Config:
