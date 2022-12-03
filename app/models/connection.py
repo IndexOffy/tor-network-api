@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, Boolean, UniqueConstraint
-from app.settings.database import Base, engine
+from app.core.database import Base, engine
 
 
 class Connection(Base):

@@ -2,10 +2,10 @@ from typing import List
 from fastapi import Depends, APIRouter, Request, status
 
 from sqlalchemy.orm import Session
-from app.settings.database import get_db
+from app.core.database import get_db
 
 from app.schemas.connection import Schema, SchemaCreate, SchemaPut
-from app.settings.controller import ControllerConnection as Controller
+from app.core.controller import ControllerConnection as Controller
 
 
 router = APIRouter()

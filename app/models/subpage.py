@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
-from app.settings.database import Base, engine
+from app.core.database import Base, engine
 
 
 class SubPage(Base):
