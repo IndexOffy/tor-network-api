@@ -3,8 +3,8 @@ from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from app.core.database import Base, engine
 
 
-class SubPage(Base):
-    __tablename__ = "subpage"
+class Url(Base):
+    __tablename__ = "url"
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, index=True)

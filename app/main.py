@@ -1,14 +1,18 @@
 from fastapi import FastAPI
+from mangum import Mangum
 
 from app.api.v1.routers import router
-from app.settings.config import ENVIRONMENT
-from mangum import Mangum
+from app.config import ENVIRONMENT, BASE_DIR
+
+
+with open(f"{BASE_DIR}/docs/api.md", "r", encoding="utf-8") as fh:
+    description = fh.read()
 
 
 app = FastAPI(
-    title="OnionAPI",
-    description="Project OnionAPI",
+    title="TorNetwork API",
     version="0.0.1",
+    description=description,
     root_path=ENVIRONMENT
 )
 

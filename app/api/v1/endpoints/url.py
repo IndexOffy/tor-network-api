@@ -4,14 +4,14 @@ from fastapi import Depends, APIRouter, Request, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 
-from app.schemas.connection import Schema, SchemaCreate, SchemaPut
-from app.core.controller import ControllerConnection as Controller
+from app.schemas.url import Schema, SchemaCreate, SchemaPut
+from app.core.controller import ControllerUrl as Controller
 
 
 router = APIRouter()
 
 
-@router.get("/connections/", response_model=List[Schema])
+@router.get("/urls/", response_model=List[Schema])
 def get_all(
         request: Request,
         offset: int = 0,
@@ -28,16 +28,23 @@ def get_all(
     )
 
 
-@router.get("/connections/{model_id}", response_model=Schema)
+@router.get("/urls/{model_id}", response_model=Schema)
 def get_one(model_id: int, db: Session = Depends(get_db)):
     return Controller(db=db).get(model_id=model_id)
 
 
-@router.put("/connections/{model_id}", response_model=Schema)
+@router.put("/urls/{model_id}", response_model=Schema)
 def update(model_id: int, item: SchemaPut, db: Session = Depends(get_db)):
     return Controller(db=db).put(data=item.dict(), model_id=model_id)
 
 
-@router.post("/connections/", response_model=Schema, status_code=status.HTTP_201_CREATED)
+@router.post("/urls/", response_model=Schema, status_code=status.HTTP_201_CREATED)
 def create(item: SchemaCreate, db: Session = Depends(get_db)):
     return Controller(db=db).post(data=item.dict())
+
+
+@router.put("/urls/", response_model=Schema, include_in_schema=False)
+def put_by_param(request: Request, item: SchemaPut, db: Session = Depends(get_db)):
+    query = Controller(db=db)
+    params = request.query_params._dict
+    return query.put(data=item.dict(), params=params)

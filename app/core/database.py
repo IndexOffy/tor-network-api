@@ -1,4 +1,4 @@
-from app.settings.config import DATABASE_URL
+from app.config import DATABASE_URL
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -20,7 +20,7 @@ SessionLocal = sessionmaker(
 Base = declarative_base()
 
 
-async def get_db():
+def get_db():
     db = SessionLocal()
     try:
         yield db
