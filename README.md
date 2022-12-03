@@ -23,5 +23,5 @@ $ sudo docker run -d -t -p 8080:8080 tor-api/dev
 - 📦 PyPI
 
 **RESOURCES**
-- GitHub: https://github.com/IndexOffy/onion-api
+- GitHub: https://github.com/IndexOffy/tor-network-api
 - Docs:   http://www.indexoffy.com/
