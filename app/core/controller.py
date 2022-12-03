@@ -2,8 +2,8 @@ from typing import Any
 from sqlalchemy.orm import Session
 from fastapi.responses import Response
 
-from app.models import Link, Category, Connection, SubPage
-from app.settings.database import engine
+from app.models import Link, Category, Connection, SubPage, Url
+from app.core.database import engine
 
 
 class BaseController(object):
@@ -189,3 +189,9 @@ class ControllerSubPage(BaseController):
     def __init__(self, db: Session):
         super().__init__(db)
         self.model_class = SubPage
+
+class ControllerUrl(BaseController):
+
+    def __init__(self, db: Session):
+        super().__init__(db)
+        self.model_class = Url
