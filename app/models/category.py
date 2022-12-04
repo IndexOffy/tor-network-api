@@ -7,6 +7,7 @@ class Category(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, index=True)
+    reference = Column(Integer)
     name = Column(String(45))
 
 

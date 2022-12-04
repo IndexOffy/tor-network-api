@@ -2,17 +2,21 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class CategoryBase(BaseModel):
+class SchemaBase(BaseModel):
+    reference: Optional[int] = None
     name: Optional[str] = None
 
-class CategoryPut(CategoryBase):
+
+class SchemaPut(SchemaBase):
+    reference: Optional[int] = None
     name: Optional[str] = None
 
-class CategoryCreate(CategoryBase):
+
+class SchemaCreate(SchemaBase):
     pass
 
 
-class SchemaCategory(CategoryBase):
+class Schema(SchemaBase):
     id: int
 
     class Config:
