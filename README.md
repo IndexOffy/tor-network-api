@@ -8,7 +8,7 @@
  \__\___/|_|  |_| |_|\___|\__| \_/\_/ \___/|_|  |_|\_\ v1.0
  ```
 
-## Running the project with [Docker]
+### Running the project with [Docker]
 
  - Building the Docker image
 
