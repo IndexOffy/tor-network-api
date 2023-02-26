@@ -2,7 +2,7 @@ from typing import Any
 from sqlalchemy.orm import Session
 from fastapi.responses import Response
 
-from app.models import Link, Category, Connection, SubPage, Url
+from app.models import Link, Category, LinkConnection, SubPage, Url
 from app.core.database import engine
 
 
@@ -138,30 +138,6 @@ class BaseController(object):
 
         return Response(status_code=204)
 
-    def get_by(self, params: dict, offset: int = 0, limit: int = 100):
-        try:
-            query_model = self.db.query(self.model_class)
-
-            for item in params:
-                item_param = None if params.get(item) == 'null' else params.get(item)
-
-                query_model = query_model.filter(
-                    getattr(self.model_class, item) == item_param
-                )
-
-            query_model = query_model.offset(offset).limit(limit).all()
-            if query_model:
-                return query_model
-
-        except Exception:
-            return Response(status_code=422)
-
-        finally:
-            if self.close_session:
-                self.db.close()
-
-        return Response(status_code=204)
-
 
 class ControllerLink(BaseController):
 
@@ -181,7 +157,7 @@ class ControllerConnection(BaseController):
 
     def __init__(self, db: Session):
         super().__init__(db)
-        self.model_class = Connection
+        self.model_class = LinkConnection
 
 
 class ControllerSubPage(BaseController):
@@ -189,6 +165,7 @@ class ControllerSubPage(BaseController):
     def __init__(self, db: Session):
         super().__init__(db)
         self.model_class = SubPage
+
 
 class ControllerUrl(BaseController):
 

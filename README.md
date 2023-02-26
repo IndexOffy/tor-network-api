@@ -24,12 +24,21 @@ $ sudo docker run -d -t -p 8080:8080 tor-api/dev
 ```
 
 ### Commit Style
+
 - ⚙️ NO-TASK
 - 📝 PEP8
 - 📌 ISSUE
 - 🪲 BUG
 - 📘 DOCS
-- 📦 PyPI
+- 📦 BUILD
+- ❤️️ TEST
+- ⚠️ SECURITY
+
+### License
+
+![GitHub](https://img.shields.io/github/license/IndexOffy/tor-network-dataset?style=flat-square)
+
+This project is licensed under the terms of the MIT license.
 
 **RESOURCES**
 - GitHub: https://github.com/IndexOffy/tor-network-api

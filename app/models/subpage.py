@@ -1,6 +1,11 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
-from app.core.database import Base, engine
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    Boolean)
+from app.core.database import Base
 
 
 class SubPage(Base):
@@ -13,6 +18,4 @@ class SubPage(Base):
     running = Column(Boolean, default=False, index=True)
     fail = Column(Boolean, default=False)
     created_date = Column(DateTime, default=datetime.utcnow)
-
-
-Base.metadata.create_all(bind=engine)
+    update_date = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

@@ -1,26 +1,30 @@
 from fastapi import FastAPI
 from mangum import Mangum
 
+from app import __version__
 from app.api.v1.routers import router
-from app.config import ENVIRONMENT, BASE_DIR
+from app.core.settings import set_up
 
 
-with open(f"{BASE_DIR}/docs/api.md", "r", encoding="utf-8") as fh:
-    description = fh.read()
-
-
+config = set_up()
 app = FastAPI(
     title="TorNetwork API",
-    version="0.0.1",
-    description=description,
-    root_path=ENVIRONMENT
+    description="TorNetwork Project API",
+    version=__version__,
+    root_path=config.get("ENVIRONMENT"),
 )
 
 
-@app.get("/status")
+@app.get("/status", include_in_schema=False)
 def get_status():
     """Get status of messaging server."""
-    return ({"status": "it's alive"})
+    return ({"status":  "it's alive"})
+
+
+@app.get("/error", include_in_schema=False)
+def get_status():
+    """Get error of messaging server."""
+    raise
 
 
 app.include_router(router, prefix="/v1")
