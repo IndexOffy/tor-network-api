@@ -1,8 +1,11 @@
-from typing import Any
+import logging
 from sqlalchemy.orm import Session
-from fastapi.responses import Response
-
-from app.models import Link, Category, LinkConnection, SubPage, Url
+from app.models import (
+    Link,
+    LinkConnection,
+    Category,
+    SubPage,
+    Url)
 from app.core.database import engine
 
 
@@ -22,68 +25,42 @@ class BaseController(object):
 
         self.model_class = None
 
-    def _get_all(self, *args: Any, **kwargs: Any):
-        """Query to get all records from the database.
+    def read(
+            self,
+            offset: int = 0,
+            limit: int = 100,
+            sort_by: str = 'id',
+            order_by: str = 'desc',
+            qtype: str = 'first',
+            params: dict = {},
+            **kwargs):
+        """Get a record from the database.
         """
-
         columns = dict()
-        params = kwargs.get("request").query_params._dict
         for param in self.model_class.__mapper__.attrs.keys():
-            if params.get(param) is not None:
+            if kwargs.get(param) is not None:
                 columns[param] = params.get(param)
 
         try:
             query_model = self.db.query(self.model_class)
-
             for column in columns:
                 item_param = None if columns.get(column) == 'null' else columns.get(column)
-
                 query_model = query_model.filter(
-                    getattr(self.model_class, column) == item_param
-                )
+                    getattr(self.model_class, column) == item_param)
 
-            order_by = getattr(self.model_class, kwargs.get("sort_by"))
+            sort_by = getattr(self.model_class, sort_by)
 
-            query_model = query_model.order_by(
-                getattr(order_by, kwargs.get("order_by"))()
-            ).offset(
-                kwargs.get("offset")
-            ).limit(
-                kwargs.get("limit")
-            ).all()
+            return getattr(query_model.order_by(
+                getattr(sort_by, order_by)()).offset(offset).limit(limit), qtype)()
 
-            if query_model:
-                return query_model
-
-        except Exception:
-            return Response(status_code=422)
+        except Exception as error:
+            logging.error(error)
 
         finally:
             if self.close_session:
                 self.db.close()
 
-        return Response(status_code=204)
-
-    def get(self, model_id: int):
-        """Get a record from the database.
-        """
-        try:
-            query = self.db.query(self.model_class).filter(
-                self.model_class.id == model_id
-            ).first()
-
-            if query:
-                return query
-        except Exception:
-            return Response(status_code=422)
-
-        finally:
-            if self.close_session:
-                self.db.close()
-
-        return Response(status_code=204)
-
-    def post(self, data: dict):
+    def create(self, data: dict):
         """Create a record in the database.
         """
         db_data = self.model_class(**data)
@@ -92,19 +69,24 @@ class BaseController(object):
             self.db.commit()
             self.db.refresh(db_data)
             return db_data
-        except Exception:
-            return Response(status_code=422)
+
+        except Exception as error:
+            logging.error(error)
+            return None
 
         finally:
             if self.close_session:
                 self.db.close()
 
-    def put(self, data: dict, model_id: int = None, params: dict = list()):
+    def update(
+            self,
+            data: dict,
+            model_id: int = None,
+            params: dict = list()):
         """Edit a record in the database.
         """
         try:
             query_model = self.db.query(self.model_class)
-
             if model_id:
                 query_model = query_model.filter(
                     self.model_class.id == model_id
@@ -127,16 +109,16 @@ class BaseController(object):
                 self.db.merge(query_model)
                 self.db.commit()
                 self.db.refresh(query_model)
+
                 return query_model
 
-        except:
-            return Response(status_code=422)
+        except Exception as error:
+            logging.error(error)
+            return None
 
         finally:
             if self.close_session:
                 self.db.close()
-
-        return Response(status_code=204)
 
 
 class ControllerLink(BaseController):
