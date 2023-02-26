@@ -1,6 +1,11 @@
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    Boolean)
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
-from app.core.database import Base, engine
+from app.core.database import Base
 
 
 class Link(Base):
@@ -19,6 +24,4 @@ class Link(Base):
     login = Column(Boolean, default=False)
     attempts = Column(Integer, default=0)
     created_date = Column(DateTime, default=datetime.utcnow)
-
-
-Base.metadata.create_all(bind=engine)
+    update_date = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

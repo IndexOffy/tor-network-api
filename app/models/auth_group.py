@@ -1,14 +1,16 @@
 from sqlalchemy import (
     Column,
-    Integer,
-    String)
+    String,
+    Integer)
 from app.core.database import Base
 
 
-class Category(Base):
-    __tablename__ = "category"
+class AuthGroup(Base):
+    """Model Auth Group
+    """
+
+    __tablename__ = "auth_group"
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, index=True)
-    reference = Column(Integer)
-    name = Column(String(45))
+    name = Column(String(75), unique=True)
