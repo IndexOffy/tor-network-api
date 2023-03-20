@@ -43,5 +43,5 @@ This project is licensed under the terms of the MIT license.
 
 **RESOURCES**
 
-- GitHub: [https://github.com/IndexOffy/tor-network-api-search](https://github.com/IndexOffy/tor-network-api)
+- GitHub: [https://github.com/IndexOffy/tor-network-api](https://github.com/IndexOffy/tor-network-api)
 - Site:   [http://www.indexoffy.com/](http://www.indexoffy.com/)
