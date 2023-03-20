@@ -5,7 +5,8 @@ from app.models import (
     LinkConnection,
     Category,
     SubPage,
-    Url)
+    Url,
+    AuthUser)
 from app.core.database import engine
 
 
@@ -13,7 +14,7 @@ class BaseController(object):
     """ Base View to create helpers common to all Webservices.
     """
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session = None):
         """Constructor
         """
         self.close_session = None
@@ -123,34 +124,41 @@ class BaseController(object):
 
 class ControllerLink(BaseController):
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session = None):
         super().__init__(db)
         self.model_class = Link
 
 
 class ControllerCategory(BaseController):
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session = None):
         super().__init__(db)
         self.model_class = Category
 
 
 class ControllerConnection(BaseController):
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session = None):
         super().__init__(db)
         self.model_class = LinkConnection
 
 
 class ControllerSubPage(BaseController):
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session = None):
         super().__init__(db)
         self.model_class = SubPage
 
 
 class ControllerUrl(BaseController):
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session = None):
         super().__init__(db)
         self.model_class = Url
+
+
+class ControllerAuthUser(BaseController):
+
+    def __init__(self, db: Session = None):
+        super().__init__(db)
+        self.model_class = AuthUser
