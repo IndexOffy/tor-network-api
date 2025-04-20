@@ -39,7 +39,9 @@ $ sudo docker run -d -t -p 8080:8080 tor-api/dev
 
 ![GitHub](https://img.shields.io/github/license/IndexOffy/tor-network-api?style=flat-square)
 
-This project is licensed under the terms of the MIT license.
+## License
+
+This project is licensed under the terms of the GPL-3.0 license.
 
 **RESOURCES**
 
