@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey
 
 from app.core.database import Base
-from app.models import AuthUser, AuthGroup
+from app.models.v1 import AuthUser, AuthGroup
 
 
 class AuthUserGroup(Base):

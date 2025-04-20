@@ -2,7 +2,7 @@ import logging
 
 from sqlalchemy.orm import Session
 
-from app.models import Link, LinkConnection, Category, SubPage, Url, AuthUser
+from app.models.v1 import Link, LinkConnection, Category, SubPage, Url, AuthUser
 from app.core.database import engine
 
 

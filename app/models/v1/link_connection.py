@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, Boolean, UniqueConstraint, ForeignKey
 
 from app.core.database import Base
-from app.models.link import Link
+from app.models.v1.link import Link
 
 
 class LinkConnection(Base):
