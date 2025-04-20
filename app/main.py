@@ -15,17 +15,18 @@ app = FastAPI(
     root_path=config.get("ENVIRONMENT"),
     version=__version__,
     docs_url=None,
-    redoc_url=None)
+    redoc_url=None,
+)
 
 
 @app.get("/status", include_in_schema=False)
 def get_status(user=Depends(authorization)):
     """Get status of messaging server."""
-    return ({"status":  "it's alive"})
+    return {"status": "it's alive"}
 
 
 @app.get("/error", include_in_schema=False)
-def get_status(user=Depends(authorization)):
+def get_error(user=Depends(authorization)):
     """Get error of messaging server."""
     raise
 

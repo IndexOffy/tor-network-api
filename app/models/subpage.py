@@ -1,16 +1,12 @@
 from datetime import datetime
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    DateTime,
-    Boolean)
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
+
 from app.core.database import Base
 
 
 class SubPage(Base):
     __tablename__ = "subpage"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
 
     id = Column(Integer, primary_key=True, index=True)
     link = Column(String(150), unique=True, index=True)

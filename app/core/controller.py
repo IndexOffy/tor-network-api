@@ -1,22 +1,16 @@
 import logging
+
 from sqlalchemy.orm import Session
-from app.models import (
-    Link,
-    LinkConnection,
-    Category,
-    SubPage,
-    Url,
-    AuthUser)
+
+from app.models import Link, LinkConnection, Category, SubPage, Url, AuthUser
 from app.core.database import engine
 
 
 class BaseController(object):
-    """ Base View to create helpers common to all Webservices.
-    """
+    """Base View to create helpers common to all Webservices."""
 
     def __init__(self, db: Session = None):
-        """Constructor
-        """
+        """Constructor"""
         self.close_session = None
         if db:
             self.db = db
@@ -27,16 +21,16 @@ class BaseController(object):
         self.model_class = None
 
     def read(
-            self,
-            offset: int = 0,
-            limit: int = 100,
-            sort_by: str = 'id',
-            order_by: str = 'desc',
-            qtype: str = 'first',
-            params: dict = {},
-            **kwargs):
-        """Get a record from the database.
-        """
+        self,
+        offset: int = 0,
+        limit: int = 100,
+        sort_by: str = "id",
+        order_by: str = "desc",
+        qtype: str = "first",
+        params: dict = {},
+        **kwargs
+    ):
+        """Get a record from the database."""
         columns = dict()
         for param in self.model_class.__mapper__.attrs.keys():
             if kwargs.get(param) is not None:
@@ -45,14 +39,21 @@ class BaseController(object):
         try:
             query_model = self.db.query(self.model_class)
             for column in columns:
-                item_param = None if columns.get(column) == 'null' else columns.get(column)
+                item_param = (
+                    None if columns.get(column) == "null" else columns.get(column)
+                )
                 query_model = query_model.filter(
-                    getattr(self.model_class, column) == item_param)
+                    getattr(self.model_class, column) == item_param
+                )
 
             sort_by = getattr(self.model_class, sort_by)
 
-            return getattr(query_model.order_by(
-                getattr(sort_by, order_by)()).offset(offset).limit(limit), qtype)()
+            return getattr(
+                query_model.order_by(getattr(sort_by, order_by)())
+                .offset(offset)
+                .limit(limit),
+                qtype,
+            )()
 
         except Exception as error:
             logging.error(error)
@@ -62,8 +63,7 @@ class BaseController(object):
                 self.db.close()
 
     def create(self, data: dict):
-        """Create a record in the database.
-        """
+        """Create a record in the database."""
         db_data = self.model_class(**data)
         try:
             self.db.add(db_data)
@@ -79,19 +79,12 @@ class BaseController(object):
             if self.close_session:
                 self.db.close()
 
-    def update(
-            self,
-            data: dict,
-            model_id: int = None,
-            params: dict = list()):
-        """Edit a record in the database.
-        """
+    def update(self, data: dict, model_id: int = None, params: dict = list()):
+        """Edit a record in the database."""
         try:
             query_model = self.db.query(self.model_class)
             if model_id:
-                query_model = query_model.filter(
-                    self.model_class.id == model_id
-                )
+                query_model = query_model.filter(self.model_class.id == model_id)
 
             if params:
                 for item in params:

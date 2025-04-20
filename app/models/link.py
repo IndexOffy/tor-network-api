@@ -1,16 +1,12 @@
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    DateTime,
-    Boolean)
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
+
 from datetime import datetime
 from app.core.database import Base
 
 
 class Link(Base):
     __tablename__ = "link"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
 
     id = Column(Integer, primary_key=True, index=True)
     link = Column(String(95), unique=True, index=True)

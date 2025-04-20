@@ -13,32 +13,36 @@ from app.core.security import security, auth_handler
 auth = APIRouter(tags=["Auth"])
 
 
-@auth.post('/signup')
+@auth.post("/signup")
 async def signup(user: SchemaCreate, db: Session = Depends(get_db)):
     query_user = ControllerAuthUser(db=db).read(params={"email": user.email})
 
     if query_user:
-        return 'Account already exists'
+        return "Account already exists"
     else:
         hashed_password = auth_handler.encode_password(user.password.get_secret_value())
         query_user = ControllerAuthUser(db=db).create(
             data={
                 "email": user.email,
                 "username": user.username,
-                "password": hashed_password})
+                "password": hashed_password,
+            }
+        )
 
         return SchemaSignup(**query_user.__dict__)
 
 
-@auth.post('/login')
+@auth.post("/login")
 async def login(user: SchemaCreate, db: Session = Depends(get_db)):
     query_user = ControllerAuthUser(db=db).read(params={"email": user.email})
 
-    if (query_user is None):
-        return HTTPException(status_code=401, detail='Invalid email')
+    if query_user is None:
+        return HTTPException(status_code=401, detail="Invalid email")
 
-    if (not auth_handler.verify_password(user.password.get_secret_value(), query_user.password)):
-        return HTTPException(status_code=401, detail='Invalid password')
+    if not auth_handler.verify_password(
+        user.password.get_secret_value(), query_user.password
+    ):
+        return HTTPException(status_code=401, detail="Invalid password")
 
     access_token = auth_handler.encode_token(query_user.email)
     refresh_token = auth_handler.encode_refresh_token(query_user.email)
@@ -46,7 +50,7 @@ async def login(user: SchemaCreate, db: Session = Depends(get_db)):
     return {"access_token": access_token, "refresh_token": refresh_token}
 
 
-@auth.get('/refresh_token')
+@auth.get("/refresh_token")
 async def refresh_token(credentials: HTTPAuthorizationCredentials = Security(security)):
     refresh_token = credentials.credentials
     new_token = auth_handler.refresh_token(refresh_token)
