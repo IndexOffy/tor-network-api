@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "tor-network-api"
+version = "0.1.0"
+description = ""
+authors = ["FernandoCelmer <email@fernandocelmer.com>"]
+license = "GPL-3.0-only"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.12"
+pymysql = "^1.1.1"
+python-dotenv = "^1.1.0"
+sqlalchemy = "^2.0.40"
+uvicorn = "^0.34.2"
+mangum = "^0.19.0"
+pyjwt = "^2.10.1"
+passlib = "^1.7.4"
+pydantic = "^2.11.3"
+
+
+[tool.poetry.group.development.dependencies]
+alembic = "^1.15.2"
+pytest = "^8.3.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
