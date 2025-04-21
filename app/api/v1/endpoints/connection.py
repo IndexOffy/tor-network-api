@@ -4,7 +4,7 @@ from fastapi import Depends, APIRouter, Request, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 
-from app.schemas.connection import Schema, SchemaCreate, SchemaPut
+from app.schemas.v1.connection import Schema, SchemaCreate, SchemaPut
 from app.core.controller import ControllerConnection as Controller
 
 
