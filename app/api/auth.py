@@ -15,7 +15,7 @@ auth = APIRouter(tags=["Auth"])
 
 @auth.post("/signup")
 async def signup(user: SchemaCreate, db: Session = Depends(get_db)):
-    query_user = ControllerAuthUser(db=db).read(params={"email": user.email})
+    query_user = ControllerAuthUser(db=db).read(**{"email": user.email})
 
     if query_user:
         return "Account already exists"
